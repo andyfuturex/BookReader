@@ -26,12 +26,8 @@ import com.justwayward.reader.component.DaggerAppComponent;
 import com.justwayward.reader.module.AppModule;
 import com.justwayward.reader.module.BookApiModule;
 import com.justwayward.reader.utils.AppUtils;
-import com.justwayward.reader.utils.FileUtils;
 import com.justwayward.reader.utils.LogUtils;
 import com.justwayward.reader.utils.SharedPreferencesUtil;
-import com.sinovoice.hcicloudsdk.api.HciCloudSys;
-import com.sinovoice.hcicloudsdk.common.HciErrorCode;
-import com.sinovoice.hcicloudsdk.common.InitParam;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -94,27 +90,5 @@ public class ReaderApplication extends Application {
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
-    }
-
-    protected void initHciCloud() {
-        InitParam initparam = new InitParam();
-        String authDirPath = getFilesDir().getAbsolutePath();
-        initparam.addParam(InitParam.AuthParam.PARAM_KEY_AUTH_PATH, authDirPath);
-        initparam.addParam(InitParam.AuthParam.PARAM_KEY_AUTO_CLOUD_AUTH, "no");
-        initparam.addParam(InitParam.AuthParam.PARAM_KEY_CLOUD_URL, "test.api.hcicloud.com:8888");
-        initparam.addParam(InitParam.AuthParam.PARAM_KEY_DEVELOPER_KEY, "0a5e69f8fb1c019b2d87a17acf200889");
-        initparam.addParam(InitParam.AuthParam.PARAM_KEY_APP_KEY, "0d5d5466");
-        String logDirPath = FileUtils.createRootPath(this) + "/hcicloud";
-        FileUtils.createDir(logDirPath);
-        initparam.addParam(InitParam.LogParam.PARAM_KEY_LOG_FILE_PATH, logDirPath);
-        initparam.addParam(InitParam.LogParam.PARAM_KEY_LOG_FILE_COUNT, "5");
-        initparam.addParam(InitParam.LogParam.PARAM_KEY_LOG_FILE_SIZE, "1024");
-        initparam.addParam(InitParam.LogParam.PARAM_KEY_LOG_LEVEL, "5");
-        int errCode = HciCloudSys.hciInit(initparam.getStringConfig(), this);
-        if (errCode != HciErrorCode.HCI_ERR_NONE) {
-            LogUtils.e("HciCloud初始化失败" + errCode);
-            return;
-        }
-        LogUtils.e("HciCloud初始化成功");
     }
 }

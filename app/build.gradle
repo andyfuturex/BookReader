@@ -1,36 +1,28 @@
 apply plugin: 'com.android.application'
-apply plugin: 'android-apt'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
-        applicationId "com.justwayward.reader"
+        applicationId "com.easyrun.reader"
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
+
+        javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
     }
 
     signingConfigs {
-        release {
-            storeFile file(KEYSTORE_FILE)
-            storePassword KEYSTORE_PWD
-            keyAlias KEY_ALIAS
-            keyPassword KEY_PWD
-        }
     }
 
     buildTypes {
         debug {
-            signingConfig signingConfigs.release
         }
-
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
         }
     }
 
@@ -63,7 +55,7 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
     // Annotation
     compile 'com.google.dagger:dagger:2.0.2'
-    apt 'com.google.dagger:dagger-compiler:2.0.2'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.0.2'
     provided 'org.glassfish:javax.annotation:10.0-b28'
     compile 'com.jakewharton:butterknife:7.0.1'
     // Rx
@@ -71,13 +63,10 @@ dependencies {
     compile 'io.reactivex:rxjava:1.1.5'
     // Bus
     compile 'org.greenrobot:eventbus:3.0.0'
-
     compile 'com.commit451:PhotoView:1.2.4'
     compile 'org.ccil.cowan.tagsoup:tagsoup:1.2.1'
-
     // leakcanary
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    // debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+    compile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-
 }

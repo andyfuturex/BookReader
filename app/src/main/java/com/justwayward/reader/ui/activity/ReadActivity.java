@@ -78,16 +78,12 @@ import com.justwayward.reader.utils.FormatUtils;
 import com.justwayward.reader.utils.LogUtils;
 import com.justwayward.reader.utils.ScreenUtils;
 import com.justwayward.reader.utils.SharedPreferencesUtil;
-import com.justwayward.reader.utils.TTSPlayerUtils;
 import com.justwayward.reader.utils.ToastUtils;
 import com.justwayward.reader.view.readview.BaseReadView;
 import com.justwayward.reader.view.readview.NoAimWidget;
 import com.justwayward.reader.view.readview.OnReadStateChangeListener;
 import com.justwayward.reader.view.readview.OverlappedWidget;
 import com.justwayward.reader.view.readview.PageWidget;
-import com.sinovoice.hcicloudsdk.android.tts.player.TTSPlayer;
-import com.sinovoice.hcicloudsdk.common.tts.TtsConfig;
-import com.sinovoice.hcicloudsdk.player.TTSCommonPlayer;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -194,12 +190,6 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View 
      **/
     private boolean startRead = false;
 
-    /**
-     * 朗读 播放器
-     */
-    private TTSPlayer mTtsPlayer;
-    private TtsConfig ttsConfig;
-
     private BaseReadView mPageWidget;
     private int curTheme = -1;
     private List<ReadTheme> themes;
@@ -279,9 +269,6 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View 
         showDialog();
 
         mTvBookReadTocTitle.setText(recommendBooks.title);
-
-        mTtsPlayer = TTSPlayerUtils.getTTSPlayer();
-        ttsConfig = TTSPlayerUtils.getTtsConfig();
 
         intentFilter.addAction(Intent.ACTION_BATTERY_CHANGED);
         intentFilter.addAction(Intent.ACTION_TIME_TICK);
@@ -871,9 +858,6 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        if (mTtsPlayer.getPlayerState() == TTSCommonPlayer.PLAYER_STATE_PLAYING)
-            mTtsPlayer.stop();
 
         EventManager.refreshCollectionIcon();
         EventManager.refreshCollectionList();
